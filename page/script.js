@@ -48,7 +48,7 @@ const $HEADER_TEMPLATE = $inPlace(`
 const $SECTOR_TEMPLATE = $inPlace(`
 <section id="intro" class="sector">
     <h2 class="title">Title</h2>
-    <p class="content">Content</p>
+    <div class="content">Content</div>
 </section>
 `);
 const $REGULAR_TEMPLATE = $inPlace(`
@@ -67,11 +67,12 @@ function prepareNav(page, $elem) {
     const $pageList = $(".pageList").first();
     for (let i = 0; i < page.sectors.length; ++i) {
         const sector = page.sectors[i];
-        const id = `${sector.title}Sector`;
+        // Create a valid ID from sector title (replace spaces with hyphens, lowercase)
+        const id = `${sector.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}Sector`;
         const $sector = $SECTOR_TEMPLATE.clone()
                             .attr("id", id);
         $sector.find(".title").first().text(sector.title);
-        $sector.find(".content").first().text(sector.content);
+        $sector.find(".content").first().html(sector.content);
         $elem.append($sector);
 
         const $li = $NAV_LI_TEMPLATE.clone(true);
